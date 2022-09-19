@@ -4,6 +4,7 @@ import (
 	//"io/ioutil"
 	"fmt"
 	"os"
+	"sort"
 )
 
 type Manatee struct {
@@ -36,10 +37,27 @@ func (m Manatee) GetIndex() int {
 	return(m.index)
 }
 
+func SortByAge(m []Manatee) []Manatee {
+	sort.Slice(m, func(i, j int) bool {return m[i].GetAge() < m[j].GetAge()})
+	return m
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Missing parameter, provide file name!")
 		return
+	}
+	
+	var fem_manatees []Manatee
+	var male_manatees []Manatee
+	SortByAge(fem_manatees)
+	SortByAge(male_manatees)
+	for i := range fem_manatees {
+		fmt.Println(fem_manatees[i].GetAge())
+	}
+	print("\n")
+	for i := range male_manatees {
+		fmt.Println(male_manatees[i].GetAge())
 	}
 	//data, err := ioutil.ReadFile(os.Args[1])
 	//if err != nil {
