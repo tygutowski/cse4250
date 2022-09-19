@@ -1,0 +1,27 @@
+fem_list
+male_list
+
+sort(fem_list) ### sort based on age in ascending order
+sort(male_list)
+
+func check_by_age {
+    ### first check if output is correct
+    for female, male in fem_list, male_list {
+
+        check female.size > male.size
+
+        if all females are larger than male
+            end
+        else {
+            reorder_matching_ages()
+        }
+    }
+}
+
+func reorder_matching_ages {
+    find manatees in fem_list and male_list with matches ages {
+        sort(matching_manatees by size in ascending order)
+        
+        check_by_age()
+    }
+}
