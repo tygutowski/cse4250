@@ -9,9 +9,9 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "/project-1/hello.go",
+            "program": "./project-1/hello.go",
 
-            "args": "/project-1/input.txt"
+            "args": ["input.txt"]
         }
     ]
 }

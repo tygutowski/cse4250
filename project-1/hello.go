@@ -2,6 +2,7 @@ package main
 
 import (
 	//"io/ioutil"
+	"bufio"
 	"fmt"
 	"os"
 	"sort"
@@ -18,7 +19,7 @@ func (m Manatee) SetAge(age int) {
 }
 
 func (m Manatee) GetAge() int {
-	return(m.age)
+	return (m.age)
 }
 
 func (m Manatee) SetSize(size int) {
@@ -26,7 +27,7 @@ func (m Manatee) SetSize(size int) {
 }
 
 func (m Manatee) GetSize() int {
-	return(m.size)
+	return (m.size)
 }
 
 func (m Manatee) SetIndex(index int) {
@@ -34,12 +35,27 @@ func (m Manatee) SetIndex(index int) {
 }
 
 func (m Manatee) GetIndex() int {
-	return(m.index)
+	return (m.index)
 }
 
 func SortByAge(m []Manatee) []Manatee {
-	sort.Slice(m, func(i, j int) bool {return m[i].GetAge() < m[j].GetAge()})
+	sort.Slice(m, func(i, j int) bool { return m[i].GetAge() < m[j].GetAge() })
 	return m
+}
+
+func ReadInput(fpath string) ([]string, error) {
+	file, err := os.Open(fpath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
 }
 
 func main() {
@@ -47,9 +63,12 @@ func main() {
 		fmt.Println("Missing parameter, provide file name!")
 		return
 	}
-	
+	/// Idk how the fuck to do input please help
+	ReadInput(os.Args[0])
+
 	var fem_manatees []Manatee
 	var male_manatees []Manatee
+
 	SortByAge(fem_manatees)
 	SortByAge(male_manatees)
 	for i := range fem_manatees {
