@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strconv"
+
 	//"io/ioutil"
 	"log"
 )
@@ -50,11 +52,17 @@ func ReadFile(fileName string) {
 		log.Fatalln(err)
 	}
 	defer f.Close()
-	
+
 	scanner := bufio.NewScanner(f)
+	var numManatees int = 0
 	for scanner.Scan() {
 		fmt.Println(scanner.Text())
+		if len(scanner.Text()) < 2 && numManatees == 0 {
+			numManatees, _ = strconv.Atoi(scanner.Text())
+		}
 	}
+	fmt.Println(numManatees)
+
 }
 
 func main() {
