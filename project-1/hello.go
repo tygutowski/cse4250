@@ -1,11 +1,12 @@
 package main
 
 import (
-	//"io/ioutil"
 	"bufio"
 	"fmt"
 	"os"
 	"sort"
+	//"io/ioutil"
+	"log"
 )
 
 type Manatee struct {
@@ -43,19 +44,17 @@ func SortByAge(m []Manatee) []Manatee {
 	return m
 }
 
-func ReadInput(fpath string) ([]string, error) {
-	file, err := os.Open(fpath)
+func ReadFile(fileName string) {
+	f, err := os.Open(fileName)
 	if err != nil {
-		return nil, err
+		log.Fatalln(err)
 	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
+	defer f.Close()
+	
+	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
+		fmt.Println(scanner.Text())
 	}
-	return lines, scanner.Err()
 }
 
 func main() {
@@ -63,8 +62,7 @@ func main() {
 		fmt.Println("Missing parameter, provide file name!")
 		return
 	}
-	/// Idk how the fuck to do input please help
-	ReadInput(os.Args[0])
+	ReadFile(os.Args[1])
 
 	var fem_manatees []Manatee
 	var male_manatees []Manatee
@@ -78,16 +76,5 @@ func main() {
 	for i := range male_manatees {
 		fmt.Println(male_manatees[i].GetAge())
 	}
-	//data, err := ioutil.ReadFile(os.Args[1])
-	//if err != nil {
-	//	fmt.Println("Cannot read file:", os.Args[1])
-	//	panic(err)
-	//}
-	//for _, line := range data.slice {
-	//	fmt.Println(line)
-	//}
 
-	// Example manatee instance
-	m := Manatee{age: 4, size: 6, index: 0}
-	fmt.Println(m.age)
 }
