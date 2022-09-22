@@ -7,6 +7,8 @@
 package main
 
 import (
+	"complex"
+	"errors"
 	"bufio"
 	"fmt"
 	"os"
@@ -51,6 +53,29 @@ func SortByAge(m []Manatee) []Manatee {
 	return m
 }
 
+func CheckOrder(f []Manatee, m []Manatee, pairs int) string {
+	// Check to see if front is smaller than back.
+	for i := 0; i < pairs; i++ {
+		// If at any point it isn't, break
+		if f[i].GetSize() >= m[i].GetSize() {
+			
+			return "impossible"
+		}
+	}
+	// Otherwise, it's good!
+	fString := strings.Join(f.GetAge," ")
+	mString := strings.Join(m.GetSize," ")
+	answer := fString + "\n" + mString
+	return answer
+}
+
+func IsNumberValid(num int) (int, error) {
+	if num < 1 || num > 1000000000 {
+		return 0, errors.New("Number invalid. Bounds are {1 <= n <= 10^9}")
+	}
+	return num, nil
+}
+
 func main() {
 	// Check the parameters. We need 2, one for execution, one for input file.
 	if len(os.Args) < 2 {
@@ -79,10 +104,8 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	
-	fmt.Printf("There are %d pairs of manatees\n", pairs)
-	
-	
+	IsNumberValid(pairs)
+		
 	// Instance an array for both male and female manatees
 	fManatees := make([]Manatee, pairs)
 	mManatees := make([]Manatee, pairs)
@@ -134,14 +157,16 @@ func main() {
 		}
 		mManatees[j].SetSize(mSize)
 	}
+
+	SortByAge(fManatees)
+	SortByAge(mManatees)
 	
-	
-	for j := 0; j < pairs; j++ {
-		fmt.Printf("Male manatee %d is %d years old, and is a size of %d\n", j, mManatees[j].GetAge(), mManatees[j].GetSize())
+	answer := CheckOrder(fManatees, mManatees, pairs)
+	if answer == "impossible" {
+		fmt.Println("impossible")
+	} else {
+		fmt.Println(answer)
 	}
-	// Sort arrays
-	//SortByAge(fManatees)
-	//SortByAge(mManatees)
 	
 	// Print the age of all of the female manatees
 	//for i := range fManatees {
