@@ -200,15 +200,18 @@ func main() {
 	SortByAge(fManatees)
 	SortByAge(mManatees)
 	
+	foundAnswer := false
 	// PERMUTATE THROUGH EACH POSSIBLE COMBINATION
 	/// for {
 	answer := CheckOrder(fManatees, mManatees, pairs)
 	if answer != "" {
 		// CONTINUE PERMUTATION
 		fmt.Println(answer)
+		foundAnswer = true
 		break
 	}
 	/// }
-	fmt.Println("impossible")
-
+	if !foundAnswer {
+		fmt.Println("impossible")
+	}
 }
