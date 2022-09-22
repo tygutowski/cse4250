@@ -78,34 +78,57 @@ func main() {
 	
 	
 	// Instance an array for both male and female manatees
-	fem_manatees := make([]Manatee, pairs)
-	male_manatees := make([]Manatee, pairs)
+	fManatees := make([]Manatee, pairs)
+	mManatees := make([]Manatee, pairs)
 	for i := 0; i < 4; i++ {
 		fManatee := new(Manatee)
 		mManatee := new(Manatee)
-		fem_manatees[i] = *fManatee
-		male_manatees[i] = *mManatee
+		fManatees[i] = *fManatee
+		mManatees[i] = *mManatee
 	}
 	
 	// While the scanner can still scan
-	for i := 0; i < 4; i++ {
-		scanner.Scan()
-		line := scanner.Text()
-		numbers := strings.Fields(line)
-		numbers[0])
+	scanner.Scan()
+	line := scanner.Text()
+	numbers := strings.Fields(line)
+	for j := 0; j < pairs; j++ {
+		fManatees[j].age, err = strconv.Atoi(numbers[j])
+	}
+	scanner.Scan()
+	line = scanner.Text()
+	numbers = strings.Fields(line)
+	for j := 0; j < pairs; j++ {
+		fManatees[j].size, err = strconv.Atoi(numbers[j])
+	}
+	scanner.Scan()
+	line = scanner.Text()
+	numbers = strings.Fields(line)
+	for j := 0; j < pairs; j++ {
+		mManatees[j].age, err = strconv.Atoi(numbers[j])
+	}
+	scanner.Scan()
+	line = scanner.Text()
+	numbers = strings.Fields(line)
+	for j := 0; j < pairs; j++ {
+		mManatees[j].size, err = strconv.Atoi(numbers[j])
+	}
+	
+	
+	for j := 0; j < pairs; j++ {
+		fmt.Printf("Male manatee %d is %d years old, and is a size of %d\n", j, mManatees[j].age, mManatees[j].size)
 	}
 	// Sort arrays
-	//SortByAge(fem_manatees)
-	//SortByAge(male_manatees)
+	//SortByAge(fManatees)
+	//SortByAge(mManatees)
 	
 	// Print the age of all of the female manatees
-	//for i := range fem_manatees {
-	//	fmt.Println(fem_manatees[i].GetAge())
+	//for i := range fManatees {
+	//	fmt.Println(fManatees[i].GetAge())
 	//}
 
 	// Print the age of all of the male manatees
-	//for i := range male_manatees {
-	//	fmt.Println(male_manatees[i].GetAge())
+	//for i := range mManatees {
+	//	fmt.Println(mManatees[i].GetAge())
 	//}
 
 }
