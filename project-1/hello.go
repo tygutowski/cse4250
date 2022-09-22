@@ -55,13 +55,16 @@ func ReadFile(fileName string) {
 
 	scanner := bufio.NewScanner(f)
 	var numManatees int = 0
+	var manateeData []int
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
 		if len(scanner.Text()) < 2 && numManatees == 0 {
 			numManatees, _ = strconv.Atoi(scanner.Text())
+		} else {
+			
 		}
 	}
 	fmt.Println(numManatees)
+	fmt.Println(manateeData)
 
 }
 
