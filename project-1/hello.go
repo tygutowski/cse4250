@@ -1,3 +1,9 @@
+/*
+ * Author:  Remington Greko, Tyler Gutowski: rgreko2020@my.fit.edu, tgutowski2020@my.fit.edu
+ * Course:  CSE 4250, Section 01, Fall 2022
+ * Project: Proj 01, Manatee Evacuation 
+ */
+
 package main
 
 import (
