@@ -46,40 +46,54 @@ func SortByAge(m []Manatee) []Manatee {
 }
 
 func main() {
+	// Check the parameters. We need 2, one for execution, one for input file.
 	if len(os.Args) < 2 {
 		fmt.Println("Missing parameter, provide file name!")
 		return
 	}
+	
+	// Try to open the file.
 	f, err := os.Open(os.Args[1])
+	// If there is an error, log it.
 	if err != nil {
 		log.Fatalln(err)
 	}
+	// Close the file upon ending main()
 	defer f.Close()
 	
+	// Instance a scanner for inputs
 	scanner := bufio.NewScanner(f)
-	
-	
+	// Instance an array for both male and female manatees
 	var fem_manatees []Manatee
 	var male_manatees []Manatee
 	
+	// Scan the file
 	scanner.Scan()
+	
+	// Take the first value, and make it represent each pair of manatees.
 	pairs, err := strconv.Atoi(scanner.Text())
+	// Check if there's an error. This will occur if the value isn't an integer.
 	if err != nil {
 		log.Fatalln(err)
 	}
-	pairs = pairs
 	
+	fmt.Println("There are %s pairs of manatees", pairs)
 	
-	
+	// While the scanner can still scan
 	for scanner.Scan() {
+		// Print the lines
 		fmt.Println(scanner.Text())
 	}
+	// Sort arrays
 	SortByAge(fem_manatees)
 	SortByAge(male_manatees)
+	
+	// Print the age of all of the female manatees
 	for i := range fem_manatees {
 		fmt.Println(fem_manatees[i].GetAge())
 	}
-	print("\n")
+
+	// Print the age of all of the male manatees
 	for i := range male_manatees {
 		fmt.Println(male_manatees[i].GetAge())
 	}
