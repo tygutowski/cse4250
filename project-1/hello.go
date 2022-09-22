@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	//"io/ioutil"
+	"strings"
 	"log"
 	"strconv"
 )
@@ -63,9 +63,6 @@ func main() {
 	
 	// Instance a scanner for inputs
 	scanner := bufio.NewScanner(f)
-	// Instance an array for both male and female manatees
-	var fem_manatees []Manatee
-	var male_manatees []Manatee
 	
 	// Scan the file
 	scanner.Scan()
@@ -77,25 +74,38 @@ func main() {
 		log.Fatalln(err)
 	}
 	
-	fmt.Println("There are %s pairs of manatees", pairs)
+	fmt.Printf("There are %d pairs of manatees\n", pairs)
+	
+	
+	// Instance an array for both male and female manatees
+	fem_manatees := make([]Manatee, pairs)
+	male_manatees := make([]Manatee, pairs)
+	for i := 0; i < 4; i++ {
+		fManatee := new(Manatee)
+		mManatee := new(Manatee)
+		fem_manatees[i] = *fManatee
+		male_manatees[i] = *mManatee
+	}
 	
 	// While the scanner can still scan
-	for scanner.Scan() {
-		// Print the lines
-		fmt.Println(scanner.Text())
+	for i := 0; i < 4; i++ {
+		scanner.Scan()
+		line := scanner.Text()
+		numbers := strings.Fields(line)
+		numbers[0])
 	}
 	// Sort arrays
-	SortByAge(fem_manatees)
-	SortByAge(male_manatees)
+	//SortByAge(fem_manatees)
+	//SortByAge(male_manatees)
 	
 	// Print the age of all of the female manatees
-	for i := range fem_manatees {
-		fmt.Println(fem_manatees[i].GetAge())
-	}
+	//for i := range fem_manatees {
+	//	fmt.Println(fem_manatees[i].GetAge())
+	//}
 
 	// Print the age of all of the male manatees
-	for i := range male_manatees {
-		fmt.Println(male_manatees[i].GetAge())
-	}
+	//for i := range male_manatees {
+	//	fmt.Println(male_manatees[i].GetAge())
+	//}
 
 }
