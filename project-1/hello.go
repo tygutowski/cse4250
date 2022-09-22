@@ -16,24 +16,24 @@ type Manatee struct {
 	index int
 }
 
-func (m Manatee) SetAge(age int) {
-	m.age = age
+func (m *Manatee) SetAge(newAge int) {
+	m.age = newAge
 }
 
 func (m Manatee) GetAge() int {
 	return (m.age)
 }
 
-func (m Manatee) SetSize(size int) {
-	m.size = size
+func (m *Manatee) SetSize(newSize int) {
+	m.size = newSize
 }
 
 func (m Manatee) GetSize() int {
 	return (m.size)
 }
 
-func (m Manatee) SetIndex(index int) {
-	m.index = index
+func (m *Manatee) SetIndex(newIndex int) {
+	m.index = newIndex
 }
 
 func (m Manatee) GetIndex() int {
@@ -92,30 +92,46 @@ func main() {
 	line := scanner.Text()
 	numbers := strings.Fields(line)
 	for j := 0; j < pairs; j++ {
-		fManatees[j].age, err = strconv.Atoi(numbers[j])
+		fAge, err := strconv.Atoi(numbers[j])
+		if err != nil {
+			log.Fatalln(err)
+		}
+		fManatees[j].SetAge(fAge)
 	}
 	scanner.Scan()
 	line = scanner.Text()
 	numbers = strings.Fields(line)
 	for j := 0; j < pairs; j++ {
-		fManatees[j].size, err = strconv.Atoi(numbers[j])
+		fSize, err := strconv.Atoi(numbers[j])
+		if err != nil {
+			log.Fatalln(err)
+		}
+		fManatees[j].SetSize(fSize)
 	}
 	scanner.Scan()
 	line = scanner.Text()
 	numbers = strings.Fields(line)
 	for j := 0; j < pairs; j++ {
-		mManatees[j].age, err = strconv.Atoi(numbers[j])
+		mAge, err := strconv.Atoi(numbers[j])
+		if err != nil {
+			log.Fatalln(err)
+		}
+		mManatees[j].SetAge(mAge)
 	}
 	scanner.Scan()
 	line = scanner.Text()
 	numbers = strings.Fields(line)
 	for j := 0; j < pairs; j++ {
-		mManatees[j].size, err = strconv.Atoi(numbers[j])
+		mSize, err := strconv.Atoi(numbers[j])
+		if err != nil {
+			log.Fatalln(err)
+		}
+		mManatees[j].SetSize(mSize)
 	}
 	
 	
 	for j := 0; j < pairs; j++ {
-		fmt.Printf("Male manatee %d is %d years old, and is a size of %d\n", j, mManatees[j].age, mManatees[j].size)
+		fmt.Printf("Male manatee %d is %d years old, and is a size of %d\n", j, mManatees[j].GetAge(), mManatees[j].GetSize())
 	}
 	// Sort arrays
 	//SortByAge(fManatees)
