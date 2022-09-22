@@ -7,6 +7,7 @@ import (
 	"sort"
 	//"io/ioutil"
 	"log"
+	"strconv"
 )
 
 type Manatee struct {
@@ -44,29 +45,35 @@ func SortByAge(m []Manatee) []Manatee {
 	return m
 }
 
-func ReadFile(fileName string) {
-	f, err := os.Open(fileName)
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Missing parameter, provide file name!")
+		return
+	}
+	f, err := os.Open(os.Args[1])
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer f.Close()
 	
 	scanner := bufio.NewScanner(f)
+	
+	
+	var fem_manatees []Manatee
+	var male_manatees []Manatee
+	
+	scanner.Scan()
+	pairs, err := strconv.Atoi(scanner.Text())
+	if err != nil {
+		log.Fatalln(err)
+	}
+	pairs = pairs
+	
+	
+	
 	for scanner.Scan() {
 		fmt.Println(scanner.Text())
 	}
-}
-
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Missing parameter, provide file name!")
-		return
-	}
-	ReadFile(os.Args[1])
-
-	var fem_manatees []Manatee
-	var male_manatees []Manatee
-
 	SortByAge(fem_manatees)
 	SortByAge(male_manatees)
 	for i := range fem_manatees {
