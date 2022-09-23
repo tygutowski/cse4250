@@ -146,21 +146,27 @@ func Perm(a []Manatee, f func([]Manatee)) {
 }
 
 // Permute the values at index i to len(a)-1.
-func perm(a []Manatee, f func([]Manatee), i int) {
-	if i > len(a) {
-		f(a)
-		return
-	}
-	perm(a, f, i+1)
-	for j := i + 1; j < len(a); j++ {
-		a[i].SetSize(a[j].GetSize())
-		a[j].SetSize(a[i].GetSize())
-		perm(a, f, i+1)
-		a[i].SetSize(a[j].GetSize())
-		a[j].SetSize(a[i].GetSize())
+
+RecursiveHeapAlgorithm(GeneratedPermutations int[], ElementsToPermute int[], length int) {
+	if length == 1 {
+		GeneratePermutations.append(ElementsToPermute)
+	} else {
+		length = length - 1
+		RecursiveHeapAlgorithm(ElementsToPermute, length)
+		for i := 0; i < length; i++ {
+			if length % 2 == 0 {
+				temp := mManatees[i]
+				mManatees[i] = mManatees[length]
+				mManatees[length] = temp
+			} else {
+				temp := mManatees[0]
+				mManatees[0] = mManatees[length]
+				mManatees[length] = temp
+			}
+			RecursiveHeapAlgorithm(GeneratePermutations, ElementsToPermute, length)
+		}
 	}
 }
-
 
 // Main runner function.
 func main() {
@@ -279,6 +285,12 @@ func main() {
 		mSizes[i] = mManatees[i].GetSize()
 	}
 	found := false
+	
+
+	
+	
+	
+	
 	
 	// Iterate through every imaginable permutation for both.
 	for fPermutation := range GeneratePermutationsInt(fSizes) {
