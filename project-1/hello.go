@@ -18,6 +18,8 @@ import (
 	"strings"
 )
 
+var MANNYLIST [][]Manatee
+
 // Create Manatee struct with age, size and initial index
 type Manatee struct {
 	age   int
@@ -110,7 +112,7 @@ func sliceBetween(begin, end int) []int {
 //}
 
 // Permute the values at index i to len(a)-1.
-func heapPermutation(a []Manatee, size int, n int, fPerms [][]Manatee) [][]Manatee {
+func heapPermutation(a []Manatee, size int, n int, fPerms [][]Manatee) {
 	if size == 1 {
 		///var tmpArray []Manatee
 		///for i := 0; i < pairs; i++ {
@@ -118,18 +120,12 @@ func heapPermutation(a []Manatee, size int, n int, fPerms [][]Manatee) [][]Manat
 		///}
 		///fPerms = append(fPerms, a[0])
 		///fmt.Println(a.GetSize())5
-		for i := 0; i < len(a); i++ {
-			for j := 0; j < len(a); j++ {
-				fPerms = append(fPerms[:i][:i], a[i:i+1])
-			}
-		}
-
+		fmt.Println(a)
+		MANNYLIST = append(MANNYLIST, a)
 	}
 
 	for i := 0; i < size; i++ {
-		DONDA := heapPermutation(a, size-1, n, fPerms)
-		fmt.Print(DONDA)
-		fmt.Print(" DONDA\n")
+		heapPermutation(a, size-1, n, fPerms)
 		if size%2 == 1 {
 			temp := a[0]
 			a[0] = a[size-1]
@@ -140,7 +136,6 @@ func heapPermutation(a []Manatee, size int, n int, fPerms [][]Manatee) [][]Manat
 			a[size-1] = temp
 		}
 	}
-	return fPerms
 }
 
 // Main runner function.
@@ -260,10 +255,14 @@ func main() {
 	}
 	//found := false
 
-	cock := make([][]Manatee, pairs)
+	cock := [][]Manatee{}
 	//mPerms := make([]Manatee, pairs)
-	fPerms := heapPermutation(fManatees, pairs, pairs, cock)
-	fmt.Print(fPerms)
+	heapPermutation(fManatees, pairs, pairs, cock)
+	
+	fmt.Println()
+	for i := 0; i < 6; i++ {
+		fmt.Println(MANNYLIST[i])
+	}
 	//heapPermutation(mPerms, mManatees, pairs)
 
 	// // Iterate through every imaginable permutation for both.
