@@ -1,21 +1,21 @@
 /*
  * Author:  Remington Greko, Tyler Gutowski: rgreko2020@my.fit.edu, tgutowski2020@my.fit.edu
  * Course:  CSE 4250, Section 01, Fall 2022
- * Project: Proj 01, Manatee Evacuation 
+ * Project: Proj 01, Manatee Evacuation
  */
 
 package main
 
 // Import everything needed
 import (
-	"errors"
 	"bufio"
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"sort"
-	"strings"
-	"log"
 	"strconv"
+	"strings"
 )
 
 // Create Manatee struct with age, size and initial index
@@ -86,7 +86,7 @@ func CheckOrder(f []Manatee, m []Manatee, pairs int) string {
 
 // Checks if the number is valid (Between 1 and 10^9, inclusive)
 // Returns an error, or nil if there is no error.
-func IsNumberValid(num int) (error) {
+func IsNumberValid(num int) error {
 	if num < 1 || num > 1000000000 {
 		return errors.New("Number invalid. Bounds are {1 <= n <= 10^9}")
 	}
@@ -129,7 +129,7 @@ func main() {
 		fmt.Println("Missing parameter, provide file name!")
 		return
 	}
-	
+
 	// Try to open the file.
 	f, err := os.Open(os.Args[1])
 	// If there is an error, log it.
@@ -138,13 +138,13 @@ func main() {
 	}
 	// Close the file upon ending main()
 	defer f.Close()
-	
+
 	// Instance a scanner for inputs
 	scanner := bufio.NewScanner(f)
-	
+
 	// Scan the file
 	scanner.Scan()
-	
+
 	// Take the first value, and make it represent each pair of manatees.
 	pairs, err := strconv.Atoi(scanner.Text())
 	// Check if there's an error. This will occur if the value isn't an integer.
@@ -155,7 +155,7 @@ func main() {
 	if err2 != nil {
 		log.Fatalln(err2)
 	}
-		
+
 	// Instance an array for both male and female manatees
 	fManatees := make([]Manatee, pairs)
 	mManatees := make([]Manatee, pairs)
@@ -167,7 +167,7 @@ func main() {
 		fManatees[i] = *fManatee
 		mManatees[i] = *mManatee
 	}
-	
+
 	// While the scanner can still scan
 	scanner.Scan()
 	line := scanner.Text()
@@ -228,18 +228,21 @@ func main() {
 
 	SortByAge(fManatees)
 	SortByAge(mManatees)
-	
+
 	foundAnswer := false
 	permsArray := permute(sliceBetween(0, len(fManatees)))
+	for i := 0; i < len(permsArray); i++ {
+		fmt.Println(permsArray[i])
+	}
 	// PERMUTATE THROUGH EACH POSSIBLE COMBINATION
 	///for {
-			answer := CheckOrder(fManatees, mManatees, pairs)
-			if answer != "" {
-			// CONTINUE PERMUTATION
-			fmt.Println(answer)
-			foundAnswer = true
-			///break
-		}
+	answer := CheckOrder(fManatees, mManatees, pairs)
+	if answer != "" {
+		// CONTINUE PERMUTATION
+		fmt.Println(answer)
+		foundAnswer = true
+		///break
+	}
 	///}
 	if !foundAnswer {
 		fmt.Println("impossible")
