@@ -93,6 +93,35 @@ func IsNumberValid(num int) (error) {
 	return nil
 }
 
+func permute(slice []int) (permutations [][]int) {
+	var rc func([]int, int)
+	rc = func(i []int, j int) {
+		if j == len(i) {
+			permutations = append(permutations, append([]int{}, i...))
+		} else {
+			for k := j; k < len(slice); k++ {
+				i[j], i[k] = i[k], i[j]
+				rc(i, j+1)
+				i[j], i[k] = i[k], i[j]
+			}
+		}
+	}
+	rc(slice, 0)
+
+	return permutations
+}
+
+func sliceBetween(begin, end int) []int {
+	if begin > end {
+		panic("Invalid slice range!")
+	}
+	slice := make([]int, end-begin)
+	for i := 0; i < len(slice); i++ {
+		slice[i] = i + 1 + begin
+	}
+	return slice
+}
+
 // Main runner function.
 func main() {
 	// Check the parameters. We need 2, one for execution, one for input file.
@@ -201,16 +230,17 @@ func main() {
 	SortByAge(mManatees)
 	
 	foundAnswer := false
+	permsArray := permute(sliceBetween(0, len(fManatees)))
 	// PERMUTATE THROUGH EACH POSSIBLE COMBINATION
-	/// for {
-	answer := CheckOrder(fManatees, mManatees, pairs)
-	if answer != "" {
-		// CONTINUE PERMUTATION
-		fmt.Println(answer)
-		foundAnswer = true
-		break
-	}
-	/// }
+	///for {
+			answer := CheckOrder(fManatees, mManatees, pairs)
+			if answer != "" {
+			// CONTINUE PERMUTATION
+			fmt.Println(answer)
+			foundAnswer = true
+			///break
+		}
+	///}
 	if !foundAnswer {
 		fmt.Println("impossible")
 	}
