@@ -93,41 +93,7 @@ func IsNumberValid(num int) error {
 	return nil
 }
 
-func GeneratePermutationsInt(data []int) <-chan []int {  
-    c := make(chan []int)
-    go func(c chan []int) {
-        defer close(c) 
-        permutateInt(c, data)
-    }(c)
-    return c 
-}
-func permutateInt(c chan []int, inputs []int){  
-    output := make([]int, len(inputs))
-    copy(output, inputs)
-    c <- output
 
-    size := len(inputs)
-    p := make([]int, size + 1)
-    for i := 0; i < size + 1; i++ {
-        p[i] = i;
-    }
-    for i := 1; i < size;{
-        p[i]--
-        j := 0
-        if i % 2 == 1 {
-            j = p[i]
-        }
-        tmp := inputs[j]
-        inputs[j] = inputs[i]
-        inputs[i] = tmp
-        output := make([]int, len(inputs))
-        copy(output, inputs)
-        c <- output
-        for i = 1; p[i] == 0; i++{
-            p[i] = i
-        }
-    }
-}
 
 func sliceBetween(begin, end int) []int {
 	if begin > end {
@@ -141,32 +107,41 @@ func sliceBetween(begin, end int) []int {
 }
 
 // Perm calls f with each permutation of a.
-func Perm(a []Manatee, f func([]Manatee)) {
-	perm(a, f, 0)
-}
+//func Perm(a []Manatee, f func([]Manatee)) {
+//	perm(a, f, 0)
+//}
 
 // Permute the values at index i to len(a)-1.
 
-RecursiveHeapAlgorithm(GeneratedPermutations int[], ElementsToPermute int[], length int) {
-	if length == 1 {
-		GeneratePermutations.append(ElementsToPermute)
-	} else {
-		length = length - 1
-		RecursiveHeapAlgorithm(ElementsToPermute, length)
-		for i := 0; i < length; i++ {
-			if length % 2 == 0 {
-				temp := mManatees[i]
-				mManatees[i] = mManatees[length]
-				mManatees[length] = temp
-			} else {
-				temp := mManatees[0]
-				mManatees[0] = mManatees[length]
-				mManatees[length] = temp
-			}
-			RecursiveHeapAlgorithm(GeneratePermutations, ElementsToPermute, length)
+func PrintArr(a []Manatee, n int) {
+	fmt.Println()
+	for i := 0; i < n; i++ {
+		fmt.Printf("%d ", a[i].GetSize())
+	}
+}
+
+func heapPermutation(a []Manatee, size int, n int) {
+	if size == 1 {
+		PrintArr(a, n)
+		return
+	}
+	
+	for i := 0; i < size; i++ {
+		heapPermutation(a, size - 1, n)
+		
+		if size % 2 == 1 {
+			temp := a[0]
+			a[0] = a[size - 1]
+			a[size - 1] = temp
+		} else {
+			temp := a[i]
+			a[i] = a[size - 1]
+			a[size - 1] = temp
 		}
 	}
 }
+
+
 
 // Main runner function.
 func main() {
@@ -284,100 +259,101 @@ func main() {
 		fSizes[i] = fManatees[i].GetSize()
 		mSizes[i] = mManatees[i].GetSize()
 	}
-	found := false
+	//found := false
 	
 
 	
+	//fPerms := make([]Manatee, pairs)
+	//mPerms := make([]Manatee, pairs)
+	heapPermutation(fManatees, pairs, pairs)
+	//heapPermutation(mPerms, mManatees, pairs)
 	
-	
-	
-	
-	// Iterate through every imaginable permutation for both.
-	for fPermutation := range GeneratePermutationsInt(fSizes) {
-		for mPermutation := range GeneratePermutationsInt(mSizes) {
-			// If we haven't found it yet, continue.
-			if !found {
-									works := true
-				// Make sure its in age-order.
-				for i := 0; i < pairs - 1; i++ {
-					if fManatees[i].GetAge() <= fManatees[i + 1].GetAge() {
-						//fmt.Printf("%d <= %d; ", fManatees[i].GetAge(), fManatees[i+1].GetAge())
-					} else {
-						works = false
-						break
-					}
-					fmt.Println()
-					if mManatees[i].GetAge() <= mManatees[i + 1].GetAge() {
-						//fmt.Printf("%d <= %d; ", mManatees[i].GetAge(), mManatees[i+1].GetAge())
-					} else {
-						works = false
-						break
-					}
-					//fmt.Println()
-				}
-				//fmt.Println()
-					// Checker to ensure that the sizes match.
+	// // Iterate through every imaginable permutation for both.
+	// /* for fPermutation := range GeneratePermutationsInt(fSizes) {
+		// for mPermutation := range GeneratePermutationsInt(mSizes) {
+			// // If we haven't found it yet, continue.
+			// if !found {
+									// works := true
+				// // Make sure its in age-order.
+				// for i := 0; i < pairs - 1; i++ {
+					// if fManatees[i].GetAge() <= fManatees[i + 1].GetAge() {
+						// //fmt.Printf("%d <= %d; ", fManatees[i].GetAge(), fManatees[i+1].GetAge())
+					// } else {
+						// works = false
+						// break
+					// }
+					// fmt.Println()
+					// if mManatees[i].GetAge() <= mManatees[i + 1].GetAge() {
+						// //fmt.Printf("%d <= %d; ", mManatees[i].GetAge(), mManatees[i+1].GetAge())
+					// } else {
+						// works = false
+						// break
+					// }
+					// //fmt.Println()
+				// }
+				// //fmt.Println()
+					// // Checker to ensure that the sizes match.
 
-					// For ALL manatees
-				for i := 0; i < pairs; i++ {
-					// Ensure that female are bigger than men.
-					// If not, then works is false!
-					if fPermutation[i] <= mPermutation[i] {
-						works = false
-					}
-				}
-				if works {
-					//fmt.Println("CUMBUSTER")
-					fmt.Println(fPermutation)
-					fmt.Println(mPermutation)
-				}
-					// If it does work
-					/* if works && !found {
-						// We found it!
-						found = true
-						// Print the original index of all females
-						for i := 0; i < pairs; i++ {
-							//fmt.Printf("%d ", fManatees[i].GetIndex())
-							fmt.Printf("%d ", fManatees[i].GetAge())
-						}
-						fmt.Println()
-						for i := 0; i < pairs; i++ {
-							//fmt.Printf("%d ", fManatees[i].GetIndex())
-							fmt.Printf("%d ", fManatees[i].GetSize())
-						}
-						fmt.Println()
-						for i := 0; i < pairs; i++ {
-							//fmt.Printf("%d ", fManatees[i].GetIndex())
-							fmt.Printf("%d ", mManatees[i].GetAge())
-						}
-						fmt.Println()
-						// Print the original index of all males
-						for i := 0; i < pairs; i++ {
-							//fmt.Printf("%d ", mManatees[i].GetIndex())
-							fmt.Printf("%d ", mManatees[i].GetSize())
-						}		
-						fmt.Println()
-						fmt.Println()
-						for i := 0; i < pairs; i++ {
-							//fmt.Printf("%d ", mManatees[i].GetIndex())
-							fmt.Printf("%d ", fManatees[i].GetIndex())
-						}		
-						fmt.Println()
-						for i := 0; i < pairs; i++ {
-							//fmt.Printf("%d ", mManatees[i].GetIndex())
-							fmt.Printf("%d ", mManatees[i].GetIndex())
-						}	
-						fmt.Println() */
-					//}
-			}
-		}
-	}
-	if !found {
-		fmt.Println("impossible")
-	}
-	Perm(fManatees, func(a []Manatee) {
-		for i := 0; i < pairs; i++ {
-			fmt.Println(a[i].GetSize()
-		}
-	})
+					// // For ALL manatees
+				// for i := 0; i < pairs; i++ {
+					// // Ensure that female are bigger than men.
+					// // If not, then works is false!
+					// if fPermutation[i] <= mPermutation[i] {
+						// works = false
+					// }
+				// }
+				// if works {
+					// //fmt.Println("CUMBUSTER")
+					// fmt.Println(fPermutation)
+					// fmt.Println(mPermutation)
+				// }
+					// // If it does work
+					// /* if works && !found {
+						// // We found it!
+						// found = true
+						// // Print the original index of all females
+						// for i := 0; i < pairs; i++ {
+							// //fmt.Printf("%d ", fManatees[i].GetIndex())
+							// fmt.Printf("%d ", fManatees[i].GetAge())
+						// }
+						// fmt.Println()
+						// for i := 0; i < pairs; i++ {
+							// //fmt.Printf("%d ", fManatees[i].GetIndex())
+							// fmt.Printf("%d ", fManatees[i].GetSize())
+						// }
+						// fmt.Println()
+						// for i := 0; i < pairs; i++ {
+							// //fmt.Printf("%d ", fManatees[i].GetIndex())
+							// fmt.Printf("%d ", mManatees[i].GetAge())
+						// }
+						// fmt.Println()
+						// // Print the original index of all males
+						// for i := 0; i < pairs; i++ {
+							// //fmt.Printf("%d ", mManatees[i].GetIndex())
+							// fmt.Printf("%d ", mManatees[i].GetSize())
+						// }		
+						// fmt.Println()
+						// fmt.Println()
+						// for i := 0; i < pairs; i++ {
+							// //fmt.Printf("%d ", mManatees[i].GetIndex())
+							// fmt.Printf("%d ", fManatees[i].GetIndex())
+						// }		
+						// fmt.Println()
+						// for i := 0; i < pairs; i++ {
+							// //fmt.Printf("%d ", mManatees[i].GetIndex())
+							// fmt.Printf("%d ", mManatees[i].GetIndex())
+						// }	
+						// fmt.Println() */
+					// //}
+			// }
+		// }
+	// }
+	// if !found {
+		// fmt.Println("impossible")
+	// }
+	// Perm(fManatees, func(a []Manatee) {
+		// for i := 0; i < pairs; i++ {
+			// fmt.Println(a[i].GetSize()
+		// }
+	// })
 }
