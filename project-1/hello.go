@@ -112,22 +112,18 @@ func sliceBetween(begin, end int) []int {
 //}
 
 // Permute the values at index i to len(a)-1.
-
-func PrintArr(a []Manatee, n int) {
-	fmt.Println()
-	for i := 0; i < n; i++ {
-		fmt.Printf("%d ", a[i].GetSize())
-	}
-}
-
-func heapPermutation(a []Manatee, size int, n int) {
+func heapPermutation(a []Manatee, size int, n int, fPerms []Manatee) []Manatee {
 	if size == 1 {
-		PrintArr(a, n)
-		return
+		tmpArray []Manatee
+		for i := 0; i < pairs; i++ {
+			
+		}
+		fPerms = append(fPerms, a[0])
+		fmt.Println(a.GetSize())
 	}
 	
 	for i := 0; i < size; i++ {
-		heapPermutation(a, size - 1, n)
+		heapPermutation(a, size - 1, n, fPerms)
 		
 		if size % 2 == 1 {
 			temp := a[0]
@@ -139,6 +135,7 @@ func heapPermutation(a []Manatee, size int, n int) {
 			a[size - 1] = temp
 		}
 	}
+	return fPerms
 }
 
 
@@ -263,9 +260,12 @@ func main() {
 	
 
 	
-	//fPerms := make([]Manatee, pairs)
+	fPerms := make([]Manatee, pairs)
 	//mPerms := make([]Manatee, pairs)
-	heapPermutation(fManatees, pairs, pairs)
+	x := heapPermutation(fManatees, pairs, pairs, fPerms)
+	for i := 0; i < pairs; i ++ {
+		fmt.Println(x[i].GetSize())
+	}
 	//heapPermutation(mPerms, mManatees, pairs)
 	
 	// // Iterate through every imaginable permutation for both.
