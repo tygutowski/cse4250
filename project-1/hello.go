@@ -120,17 +120,16 @@ func heapPermutation(a []Manatee, size int, n int, fPerms [][]Manatee) [][]Manat
 		///fmt.Println(a.GetSize())5
 		for i := 0; i < len(a); i++ {
 			for j := 0; j < len(a); j++ {
-				fPerms = append(fPerms[:i][:j], a[i:i+1])
+				fPerms = append(fPerms[:i][:i], a[i:i+1])
 			}
 		}
-		
-		return fPerms
 
 	}
 
 	for i := 0; i < size; i++ {
-		heapPermutation(a, size-1, n, fPerms)
-
+		DONDA := heapPermutation(a, size-1, n, fPerms)
+		fmt.Print(DONDA)
+		fmt.Print(" DONDA\n")
 		if size%2 == 1 {
 			temp := a[0]
 			a[0] = a[size-1]
@@ -261,10 +260,10 @@ func main() {
 	}
 	//found := false
 
-	fPerms := make([][]Manatee, pairs)
+	cock := make([][]Manatee, pairs)
 	//mPerms := make([]Manatee, pairs)
-	x := heapPermutation(fManatees, pairs, pairs, fPerms)
-	fmt.Print(x)
+	fPerms := heapPermutation(fManatees, pairs, pairs, cock)
+	fmt.Print(fPerms)
 	//heapPermutation(mPerms, mManatees, pairs)
 
 	// // Iterate through every imaginable permutation for both.
