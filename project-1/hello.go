@@ -120,8 +120,11 @@ func heapPermutation(a []Manatee, size int, n int, fPerms [][]Manatee) {
 		///}
 		///fPerms = append(fPerms, a[0])
 		///fmt.Println(a.GetSize())5
-		fmt.Println(a)
-		MANNYLIST = append(MANNYLIST, a)
+		
+		a2 := make([]Manatee, len(a))
+		copy(a2, a)
+		MANNYLIST = append(MANNYLIST, a2)
+
 	}
 
 	for i := 0; i < size; i++ {
@@ -258,7 +261,7 @@ func main() {
 	cock := [][]Manatee{}
 	//mPerms := make([]Manatee, pairs)
 	heapPermutation(fManatees, pairs, pairs, cock)
-	
+
 	fmt.Println()
 	for i := 0; i < 6; i++ {
 		fmt.Println(MANNYLIST[i])
