@@ -276,6 +276,27 @@ func main() {
 	
 	fmt.Println(fPermutations)
 	fmt.Println(mPermutations)
-	
-	for i := 0; i < 
+	// For all female permutations
+	for i := 0; i < len(fPermutations); i++ {
+		// For all male permutations
+		for j := 0; j < len(mPermutations); j++ {
+			// Check the individual manatees
+			for f := 0; f < len(fPermutations[i]); f++ {
+					if (fPermutations[f].GetSize() > mPermutations[f].GetSize()) {
+						
+					} else {
+						willWork = false
+						break
+					}
+				}
+			}
+			for f := 0; f < len(fPermutations[i] - 1); f++ {
+				if fPermutations[f].GetAge() <= fPermutations[f + 1].GetAge() {
+					
+				} else {
+				willWork = false
+				break
+			} 
+		}
+	}
 }
