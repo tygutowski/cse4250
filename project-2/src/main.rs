@@ -1,4 +1,6 @@
 use std::io;
+use std::collections::BTreeSet;
+use std::cmp::Ordering;
 
 // Manatee struct
 #[derive(Debug)]
@@ -6,6 +8,17 @@ pub struct Manatee {
 	size: i32,
 	age: i32,
 	index: i32
+}
+impl Ord for Manatee {
+	fn cmp(&self, other: &Self) -> Ordering {
+		if self.get_age() == other.get_age() {
+			if self.get_size() == other.get_size() {
+				return self.get_index().cmp(&other.get_index());
+			}
+			return self.get_size().cmp(&other.get_size());
+		}
+		return self.get_age().cmp(&other.get_age());
+	}
 }
 impl Manatee {
 	fn get_size(&self) -> i32 {
@@ -18,11 +31,12 @@ impl Manatee {
 		return self.index;
 	}
 }
+
 // Main function
-fn main() -> io::Result<()> {
+fn main() -> io::Result<()> {	
 	let mut pairs: usize = 0;
-	let mut female_manatees: Vec<Manatee> = Vec::new();
-	let mut male_manatees: Vec<Manatee> = Vec::new();
+	let mut female_manatees: BTreeSet<Manatee> = BTreeSet::new();
+	let mut male_manatees: BTreeSet<Manatee> = BTreeSet::new();
 	
 	// Read the first five lines from stdio
 	for n in 1..6  {
@@ -46,7 +60,7 @@ fn main() -> io::Result<()> {
 					age: 0,
 					index: ind
 				};
-				female_manatees.push(empty_manatee);
+				female_manatees.insert(empty_manatee);
 				female_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			
@@ -65,7 +79,7 @@ fn main() -> io::Result<()> {
 					age: 0,
 					index: ind
 				};
-				male_manatees.push(empty_manatee);
+				male_manatees.insert(empty_manatee);
 				male_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			
