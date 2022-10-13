@@ -26,10 +26,9 @@ fn main() -> io::Result<()> {
 			// Get number of pairs
 			1 =>
 			pairs = buffer_split.next().expect("found empty string where number expected").parse::<usize>().unwrap(),
-			
 			// Get female manatee age
 			2 => 
-			for i in 1..pairs {
+			for i in 1..(pairs+1) {
 				let ind: i32 = i as i32;
 				let empty_manatee = Manatee {
 					size: 0,
@@ -37,18 +36,18 @@ fn main() -> io::Result<()> {
 					index: ind
 				};
 				female_manatees.push(empty_manatee);
-				female_manatees[i].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+				female_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			
 			// Get female manatee size
 			3 =>
-			for i in 1..pairs {
-				female_manatees[i].size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+			for i in 1..(pairs+1) {
+				female_manatees[i-1].size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			
 			// Get male manatee age
 			4 =>
-			for i in 1..pairs {
+			for i in 1..(pairs+1) {
 				let ind: i32 = i as i32;
 				let empty_manatee = Manatee {
 					size: 0,
@@ -56,12 +55,12 @@ fn main() -> io::Result<()> {
 					index: ind
 				};
 				male_manatees.push(empty_manatee);
-				male_manatees[i].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+				male_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			// Get male manatee size
 			5 => 
-			for i in 1..pairs {
-				male_manatees[i].size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+			for i in 1..(pairs+1) {
+				male_manatees[i-1].size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			
 			// For anything else (which shouldn't occur)
@@ -74,7 +73,10 @@ fn main() -> io::Result<()> {
     // First the female manatees...
     
 	female_manatees.sort_by_key(|a| a.age);
-	print!("{:?}", female_manatees);
+	print!("Female Manatees: {:?}", female_manatees);
+	
+	male_manatees.sort_by_key(|a| a.age);
+	print!("Male Manatees: {:?}", male_manatees);
 	
 	/*for j in 1..(pairs - 1) {
     	let mut swap_index = j;
