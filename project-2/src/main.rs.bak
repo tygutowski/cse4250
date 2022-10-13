@@ -7,7 +7,17 @@ pub struct Manatee {
 	age: i32,
 	index: i32
 }
-
+impl Manatee {
+	fn get_size(&self) -> i32 {
+		return self.size;
+	}
+	fn get_age(&self) -> i32 {
+		return self.age;
+	}
+	fn get_index(&self) -> i32 {
+		return self.index;
+	}
+}
 // Main function
 fn main() -> io::Result<()> {
 	let mut pairs: usize = 0;
@@ -26,6 +36,7 @@ fn main() -> io::Result<()> {
 			// Get number of pairs
 			1 =>
 			pairs = buffer_split.next().expect("found empty string where number expected").parse::<usize>().unwrap(),
+			
 			// Get female manatee age
 			2 => 
 			for i in 1..(pairs+1) {
@@ -57,6 +68,7 @@ fn main() -> io::Result<()> {
 				male_manatees.push(empty_manatee);
 				male_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
+			
 			// Get male manatee size
 			5 => 
 			for i in 1..(pairs+1) {
@@ -70,34 +82,45 @@ fn main() -> io::Result<()> {
 	}
 
 	// Now that we have the trees, sort by age
-    // First the female manatees...
-    
 	female_manatees.sort_by_key(|a| a.age);
-	print!("{:?}", female_manatees);
-	
-	/*for j in 1..(pairs - 1) {
-    	let mut swap_index = j;
-		for n in j..pairs {
-			if female_manatees[n].age <= female_manatees[swap_index].age {
-				swap_index = n;
-			}
-		}
-        let temp = female_manatees[j];
-		female_manatees[j] = female_manatees[swap_index];
-		female_manatees[swap_index] = temp;
+	print!("Female Manatees: \n");
+	for i in 1..(pairs+1) {
+		print!("S: {}  A: {}  I: {}\n", female_manatees[i-1].get_size(), female_manatees[i-1].get_age(), female_manatees[i-1].get_index());
 	}
-	// then the male ones
-	for j in 1..(pairs - 1) {
-    	let mut swap_index = j;
-		for n in j..pairs {
-			if &male_manatees[n].age <= &male_manatees[swap_index].age {
-				swap_index = n;
-			}
-		}
-        let temp = male_manatees[j];
-		male_manatees[j] = male_manatees[swap_index];
-		male_manatees[swap_index] = temp;
+	print!("{}");
+	male_manatees.sort_by_key(|a| a.age);
+	print!("Male Manatees:   \n");
+	for i in 1..(pairs+1) {
+		print!("S: {}  A: {}  I: {}\n", male_manatees[i-1].get_size(), male_manatees[i-1].get_age(), male_manatees[i-1].get_index());
 	}
-	*/
+
 	Ok(())
 }
+
+
+
+// Unused sorting algorithm
+/*for j in 1..(pairs - 1) {
+	let mut swap_index = j;
+	for n in j..pairs {
+		if female_manatees[n].age <= female_manatees[swap_index].age {
+			swap_index = n;
+		}
+	}
+	let temp = female_manatees[j];
+	female_manatees[j] = female_manatees[swap_index];
+	female_manatees[swap_index] = temp;
+}
+// then the male ones
+for j in 1..(pairs - 1) {
+	let mut swap_index = j;
+	for n in j..pairs {
+		if &male_manatees[n].age <= &male_manatees[swap_index].age {
+			swap_index = n;
+		}
+	}
+	let temp = male_manatees[j];
+	male_manatees[j] = male_manatees[swap_index];
+	male_manatees[swap_index] = temp;
+}
+*/
