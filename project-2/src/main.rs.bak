@@ -1,7 +1,6 @@
 use std::io;
 
 // Manatee struct
-#[derive(Debug)]
 pub struct Manatee {
 	size: i32,
 	age: i32,
