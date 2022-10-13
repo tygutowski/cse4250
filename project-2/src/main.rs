@@ -4,6 +4,9 @@ use std::cmp::Ordering;
 
 // Manatee struct
 #[derive(Debug)]
+#[derive(Eq)]
+#[derive(PartialEq)]
+#[derive(PartialOrd)]
 pub struct Manatee {
 	size: i32,
 	age: i32,
@@ -11,24 +14,13 @@ pub struct Manatee {
 }
 impl Ord for Manatee {
 	fn cmp(&self, other: &Self) -> Ordering {
-		if self.get_age() == other.get_age() {
-			if self.get_size() == other.get_size() {
-				return self.get_index().cmp(&other.get_index());
+		if self.age == other.age {
+			if self.size == other.size {
+				return self.index.cmp(&other.index);
 			}
-			return self.get_size().cmp(&other.get_size());
+			return self.size.cmp(&other.size);
 		}
-		return self.get_age().cmp(&other.get_age());
-	}
-}
-impl Manatee {
-	fn get_size(&self) -> i32 {
-		return self.size;
-	}
-	fn get_age(&self) -> i32 {
-		return self.age;
-	}
-	fn get_index(&self) -> i32 {
-		return self.index;
+		return self.age.cmp(&other.age);
 	}
 }
 
@@ -55,38 +47,43 @@ fn main() -> io::Result<()> {
 			2 => 
 			for i in 1..(pairs+1) {
 				let ind: i32 = i as i32;
-				let empty_manatee = Manatee {
+				let mut empty_manatee = Manatee {
 					size: 0,
 					age: 0,
 					index: ind
 				};
+				empty_manatee.age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 				female_manatees.insert(empty_manatee);
-				female_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+				
 			},
 			
 			// Get female manatee size
-			3 =>
-			for i in 1..(pairs+1) {
-				female_manatees[i-1].size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+			3 => {
+				let mut manatee_iter = female_manatees.iter();
+				for i in 1..(pairs+1) {
+					manatee_iter.next().unwrap().size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+				}
 			},
 			
 			// Get male manatee age
 			4 =>
 			for i in 1..(pairs+1) {
 				let ind: i32 = i as i32;
-				let empty_manatee = Manatee {
+				let mut empty_manatee = Manatee {
 					size: 0,
 					age: 0,
 					index: ind
 				};
+				empty_manatee.age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 				male_manatees.insert(empty_manatee);
-				male_manatees[i-1].age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 			},
 			
 			// Get male manatee size
-			5 => 
-			for i in 1..(pairs+1) {
-				male_manatees[i-1].size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+			5 => {
+				let mut manatee_iter = male_manatees.iter();
+				for i in 1..(pairs+1) {
+					manatee_iter.next().unwrap().size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
+				}
 			},
 			
 			// For anything else (which shouldn't occur)
@@ -95,19 +92,13 @@ fn main() -> io::Result<()> {
 		}			
 	}
 
-	// Now that we have the trees, sort by age
-	female_manatees.sort_by_key(|a| a.age);
-	print!("Female Manatees: \n");
-	for i in 1..(pairs+1) {
-		print!("S: {}  A: {}  I: {}\n", female_manatees[i-1].get_size(), female_manatees[i-1].get_age(), female_manatees[i-1].get_index());
-	}
-	print!(" ");
-	male_manatees.sort_by_key(|a| a.age);
-	print!("Male Manatees:   \n");
-	for i in 1..(pairs+1) {
-		print!("S: {}  A: {}  I: {}\n", male_manatees[i-1].get_size(), male_manatees[i-1].get_age(), male_manatees[i-1].get_index());
-	}
 
+	print!("Female Manatees: \n");
+	let mut manatee_iter = female_manatees.iter();
+	for i in 1..(pairs+1) {
+		let current_manatee = manatee_iter.next().unwrap();
+		print!("S: {}  A: {}  I: {}\n", current_manatee.size, current_manatee.age, current_manatee.index);
+	}
 	Ok(())
 }
 
