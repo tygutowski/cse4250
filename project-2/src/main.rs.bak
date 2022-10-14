@@ -1,5 +1,4 @@
 use std::io;
-use std::collections::BTreeSet;
 use std::cmp::Ordering;
 
 // Manatee struct
@@ -24,12 +23,10 @@ impl Ord for Manatee {
 // Main function
 fn main() -> io::Result<()> {	
 	let mut pairs: usize = 0;
-	let mut female_manatees: BTreeSet<Manatee> = BTreeSet::new();
-	let mut male_manatees: BTreeSet<Manatee> = BTreeSet::new();
-	
-	let mut female_manatee_vec: Vec<Manatee> = Vec::new();
-	let mut male_manatee_vec: Vec<Manatee> = Vec::new();
-	
+	let mut female_manatees: Vec<Manatee> = Vec::new();
+	let mut male_manatees: Vec<Manatee> = Vec::new();
+	let mut max_female_size: i32 = 0;
+	let mut max_male_size: i32 = 0;
 	// Read the first five lines from stdio
 	for n in 1..6  {
 		// Set the input variable to be a new string
@@ -54,14 +51,14 @@ fn main() -> io::Result<()> {
 						index: ind
 					};
 					empty_manatee.age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
-					female_manatee_vec.push(empty_manatee);
+					female_manatees.push(empty_manatee);
 				}
 			},
 			
 			// Get female manatee size
 			3 => 
 			{
-				for manatee in &mut female_manatee_vec {
+				for manatee in &mut female_manatees {
 					manatee.size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 				}
 			},
@@ -77,13 +74,13 @@ fn main() -> io::Result<()> {
 						index: ind
 					};
 					empty_manatee.age = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
-					male_manatee_vec.push(empty_manatee);
+					male_manatees.push(empty_manatee);
 				}
 			},
 			
 			// Get male manatee size
 			5 => {
-				for manatee in &mut male_manatee_vec {
+				for manatee in &mut male_manatees {
 					manatee.size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 				}
 			},
@@ -93,26 +90,75 @@ fn main() -> io::Result<()> {
 		}			
 	}
 
-	// Insert all vector items into the BTrees
-	for manatee in &mut male_manatee_vec {
-	    male_manatees.insert(*manatee);
-	}
-	for manatee in &mut female_manatee_vec {
-	    female_manatees.insert(*manatee);
-	}
 
+	
+	// Sort both vectors of manatees.
+
+	
+	let mut impossible: bool = true;
+	
+	let mut female_answer: Vec<i32> = Vec::new();
+	let mut male_answer: Vec<i32> = Vec::new();
+	
+	// morbin' time.
+
+	for i in 0..pairs {
+		female_manatees.sort_by(|a, b| a.cmp(b));
+		male_manatees.sort_by(|a, b| a.cmp(b));
+		let mut first_male = &male_manatees[0];
+		let mut first_female = &female_manatees[0];
+		// get the smallest (first) female that is larger than the male.
+		if(female_manatees[i].size > first_male.size) {
+			print!("{}:{}", female_manatees[i].age, female_manatees[i].size);
+			female_answer.push(female_manatees[i].index);
+			male_answer.push(male_manatees[i].index);
+			break;
+		}
+	}
+	if impossible {
+		print!("impossible");
+	}
+	//let mut manatee_index = male_manatees.binary_search_by_key(&11, |&Manatee{ size, age, index }| age).unwrap();
+	//print!("{}", male_manatees[manatee_index].size);
+	
+	
+	
+	
+	print!("\n");
+	for i in 0..(pairs) {
+		let current_manatee = female_answer[i];
+		print!("{} ", current_manatee);
+	}
+	print!("\n");
+	for i in 0..(pairs) {
+		let current_manatee = male_answer[i];
+		print!("{} ", current_manatee);
+	}
+	
+	
+	
 	// Print the manatee sets
 	print!("\n");
-	let mut iter = female_manatees.iter();
-	for _i in 1..(pairs+1) {
-		let current_manatee = iter.next().unwrap();
-		print!("{}", current_manatee.index);
+	for i in 0..(pairs) {
+		let current_manatee = female_manatees[i];
+		print!("{} ", current_manatee.age);
 	}
 	print!("\n");
-	let mut iter = male_manatees.iter();
-	for _i in 1..(pairs+1) {
-		let current_manatee = iter.next().unwrap();
-		print!("{}", current_manatee.index);
+	for i in 0..(pairs) {
+		let current_manatee = female_manatees[i];
+		print!("{} ", current_manatee.size);
+	}
+	
+	
+	print!("\n\n");
+	for i in 0..(pairs) {
+		let current_manatee = male_manatees[i];
+		print!("{} ", current_manatee.age);
+	}
+	print!("\n");
+	for i in 0..(pairs) {
+		let current_manatee = male_manatees[i];
+		print!("{} ", current_manatee.size);
 	}
 	Ok(())
 }
