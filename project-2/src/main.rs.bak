@@ -102,12 +102,14 @@ fn main() -> io::Result<()> {
 	
 	// morbin' time.
 
-	for i in 0..pairs {
+	for i in 0..pairs-1 {
+		// Sort both lists of manatees
 		female_manatees.sort_by(|a, b| a.cmp(b));
 		male_manatees.sort_by(|a, b| a.cmp(b));
+		// Get the first manatee in each list
 		let mut first_male = &male_manatees[0];
 		let mut first_female = &female_manatees[0];
-		// get the smallest (first) female that is larger than the male.
+		// Get the smallest (first) female that is larger than the male.
 		if(female_manatees[i].size > first_male.size) {
 			print!("{}:{}", female_manatees[i].age, female_manatees[i].size);
 			female_answer.push(female_manatees[i].index);
@@ -121,9 +123,7 @@ fn main() -> io::Result<()> {
 	//let mut manatee_index = male_manatees.binary_search_by_key(&11, |&Manatee{ size, age, index }| age).unwrap();
 	//print!("{}", male_manatees[manatee_index].size);
 	
-	
-	
-	
+	// print indeces of manatees
 	print!("\n");
 	for i in 0..(pairs) {
 		let current_manatee = female_answer[i];
