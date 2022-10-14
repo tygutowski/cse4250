@@ -43,7 +43,7 @@ fn main() -> io::Result<()> {
 			1 =>
 			pairs = buffer_split.next().expect("found empty string where number expected").parse::<usize>().unwrap(),
 			
-			// Get female manatee age
+			// Get female manatee age and add it to the female_manatee_vec
 			2 => 
 			{
 				for i in 1..(pairs+1) {
@@ -66,7 +66,7 @@ fn main() -> io::Result<()> {
 				}
 			},
 			
-			// Get male manatee age
+			// Get female manatee age and add it to the male_manatee_vec
 			4 =>
 			{
 				for i in 1..(pairs+1) {
@@ -87,10 +87,9 @@ fn main() -> io::Result<()> {
 					manatee.size = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap();
 				}
 			},
-			
+
 			// For anything else (which shouldn't occur)
-			_ =>
-			break,
+			_ => break,
 		}			
 	}
 
@@ -101,19 +100,19 @@ fn main() -> io::Result<()> {
 	for manatee in &mut female_manatee_vec {
 	    female_manatees.insert(*manatee);
 	}
-	
+
 	// Print the manatee sets
-	print!("Female Manatees: \n");
+	print!("\n");
 	let mut iter = female_manatees.iter();
 	for _i in 1..(pairs+1) {
 		let current_manatee = iter.next().unwrap();
-		print!("S: {}  A: {}  I: {}\n", current_manatee.size, current_manatee.age, current_manatee.index);
+		print!("{}", current_manatee.index);
 	}
-	print!("Male Manatees: \n");
+	print!("\n");
 	let mut iter = male_manatees.iter();
 	for _i in 1..(pairs+1) {
 		let current_manatee = iter.next().unwrap();
-		print!("S: {}  A: {}  I: {}\n", current_manatee.size, current_manatee.age, current_manatee.index);
+		print!("{}", current_manatee.index);
 	}
 	Ok(())
 }

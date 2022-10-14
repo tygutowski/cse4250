@@ -102,17 +102,17 @@ fn main() -> io::Result<()> {
 	}
 
 	// Print the manatee sets
-	print!("Female Manatees: \n");
+	print!("\n");
 	let mut iter = female_manatees.iter();
 	for _i in 1..(pairs+1) {
 		let current_manatee = iter.next().unwrap();
-		print!("S: {}  A: {}  I: {}\n", current_manatee.size, current_manatee.age, current_manatee.index);
+		print!("{} ", current_manatee.index);
 	}
-	print!("Male Manatees: \n");
+	print!("\n");
 	let mut iter = male_manatees.iter();
 	for _i in 1..(pairs+1) {
 		let current_manatee = iter.next().unwrap();
-		print!("S: {}  A: {}  I: {}\n", current_manatee.size, current_manatee.age, current_manatee.index);
+		print!("{} ", current_manatee.index);
 	}
 	Ok(())
 }
