@@ -5,8 +5,9 @@
 // Implementation: rustc 1.57.0 (f1edd0429 2021-11-29)
 
 /*
-We used vectors rather than BTreeSet, because vectors give us the ability to use binary_search_by(), or search_by(), which are log(n).
-*/
+ * We used vectors rather than BTreeSet, because vectors give us the ability to use
+ * binary_search_by(), or search_by(), which are log(n).
+ */
 
 
 use std::io;
@@ -103,28 +104,28 @@ fn main() -> io::Result<()> {
 		}			
 	}
 
-	// Sort both vectors of manatees.
+	// Begin pairing off manatees.
 	let mut female_answer: Vec<i32> = Vec::new();
 	let mut male_answer: Vec<i32> = Vec::new();
-	
-	// Assume no pair found until one is found
+
 	let mut impossible = false;
 
 	// Sort both lists of manatees
 	female_manatees.sort_by(|a, b| a.cmp(b));
 	male_manatees.sort_by(|a, b| a.cmp(b));
 
-	// its morbin' time
 	for _i in 0..female_manatees.len() {
 		if !impossible {
 			// Get the first manatee in each list
 			let first_male = male_manatees[0];
 			let first_female = female_manatees[0];
 			
-			// This manatee might match up with an older manatee.
 			// Find the best match for the female.
 			let mut best_match = first_male;
 			let mut best_index = 0;
+			// This manatee might match up with an older manatee.
+			// However, it will always match up with the YOUNGEST manatee.
+			// So we set a variable for that.
 			let youngest_age = first_male.age;
 			// Finding the best male for the first female is a bit complex.
 			// We want the LARGEST one, but we don't know which is the largest
@@ -148,7 +149,8 @@ fn main() -> io::Result<()> {
 				male_manatees.remove(best_index);
 				male_answer.push(best_match.index);
 			}
-			else { // If we need to use females instead of males
+			else { // We didn't find a good match. Try comparing the females.
+			    let mut pair_found = false;
 				let youngest_age = first_female.age;
 				for j in 0..female_manatees.len() {
 					if female_manatees[j].size > first_male.size { // If there is a female manatee that is larger than the male
@@ -156,13 +158,19 @@ fn main() -> io::Result<()> {
 						female_answer.push(female_index);
 						let male_index = male_manatees.remove(j).index; // Put male into answer
 						male_answer.push(male_index);
+						pair_found = true;
 						break; // Break. no need to continue!
 					}
-					// Too old! Not in order anymore. It isn't possible.
-					if female_manatees[j].age >= youngest_age { 
-						impossible = true;
+					// Too old! Cut to the end, to save time.
+					if female_manatees[j].age >= youngest_age {
 						break;
 					}
+				}
+				// Moment of truth.
+				if !pair_found {
+					// No pairs found - the matching is impossible.
+					impossible = true;
+					break;
 				}
 			}
 		}
