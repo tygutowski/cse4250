@@ -162,7 +162,7 @@ fn main() -> io::Result<()> {
 						break; // Break. no need to continue!
 					}
 					// Too old! Cut to the end, to save time.
-					if female_manatees[j].age >= youngest_age {
+					if female_manatees[j].age > youngest_age {
 						break;
 					}
 				}
