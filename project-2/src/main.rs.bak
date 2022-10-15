@@ -109,7 +109,6 @@ fn main() -> io::Result<()> {
 	
 	// Assume no pair found until one is found
 	let mut impossible = false;
-	let mut no_pair = true;
 
 	// Sort both lists of manatees
 	female_manatees.sort_by(|a, b| a.cmp(b));
@@ -119,70 +118,52 @@ fn main() -> io::Result<()> {
 	for _i in 0..female_manatees.len() {
 		if !impossible {
 			// Get the first manatee in each list
-
 			let first_male = male_manatees[0];
 			let first_female = female_manatees[0];
 			
-			// No pair? This manatee might match up with an older manatee.
-			// Find the best match for the female, instead.
-			
+			// This manatee might match up with an older manatee.
+			// Find the best match for the female.
 			let mut best_match = first_male;
 			let mut best_index = 0;
 			let youngest_age = first_male.age;
-			// Finding the best male for the first female is a bit more complex.
+			// Finding the best male for the first female is a bit complex.
 			// We want the LARGEST one, but we don't know which is the largest
 			// until we've polled them all (of the right age).
-			
-			// Find a pair for the female
-			//dbg!("finding a pair for female of size {} and age {}", first_female.size, first_female.age);
 			for j in 0..male_manatees.len() {
 				// Change the best male manatee if:
 				// its size is smaller than current and
 				// its still smaller than the smallest female
-				if best_match.size < male_manatees[j].size && best_match.size < first_female.size { //|| best_match.size > first_female.size {
-					// CHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THISCHECK THIS
+				if (best_match.size < male_manatees[j].size && best_match.size < first_female.size) {
 					best_match = male_manatees[j];
 					best_index = j;
 				}
 				// Once we find one that's too big or too old, break off.
-				if male_manatees[j].age > youngest_age {//|| best_match.size > first_female.size {
+				if male_manatees[j].age > youngest_age || best_match.size > first_female.size {
 					break;
 				}
 			}
-			if best_match.size >= first_female.size {
-				// There's no good match for this female.
-				no_pair = true;
+			if best_match.size < first_female.size { // If we find a suitable pairing
+				let female_index = female_manatees.remove(0).index;
+				female_answer.push(female_index);
+				male_manatees.remove(best_index);
+				male_answer.push(best_match.index);
 			}
-			// Otherwise, add the pairs
-			//println!("removing female of size {} and age {}", female_manatees[0].size, female_manatees[0].age);
-			let female_index = female_manatees.remove(0).index;
-			female_answer.push(female_index);
-			//println!("removing male of size {} and age {}", best_match.size, best_match.age);
-			male_manatees.remove(best_index);
-			male_answer.push(best_match.index);
-			 // We found a pair
-			if no_pair {
-
+			else { // If we need to use females instead of males
 				let youngest_age = first_female.age;
-				// Find a pair for the male
-				//println!("finding a pair for male of size {} and age {}", first_male.size, first_male.age);
 				for j in 0..female_manatees.len() {
 					if female_manatees[j].size > first_male.size { // If there is a female manatee that is larger than the male
-						//dbg!("removing female of size {} and age {}", female_manatees[j].size, female_manatees[j].age);
 						let female_index = female_manatees.remove(j).index; // Put female into answer
 						female_answer.push(female_index);
-						//dbg!("removing male of size {} and age {}", male_manatees[j].size, male_manatees[j].age);
 						let male_index = male_manatees.remove(j).index; // Put male into answer
 						male_answer.push(male_index);
 						break; // Break. no need to continue!
 					}
-					// Too old! Not in order anymore. Break and try male to female.
-					if female_manatees[j].age > youngest_age { 
+					// Too old! Not in order anymore. It isn't possible.
+					if female_manatees[j].age >= youngest_age { 
 						impossible = true;
 						break;
 					}
 				}
-				no_pair = false;
 			}
 		}
 	} 
@@ -191,12 +172,10 @@ fn main() -> io::Result<()> {
 	}
 	else {
 		// print indices of manatees
-		//dbg!("\nThere are {} female answers", female_answer.len());
 		for i in 0..(female_answer.len()) {
 			print!("{} ", female_answer[i]);
 		}
 		println!("");
-		//dbg!("\nThere are {} male answers", male_answer.len());
 		for i in 0..(male_answer.len()) {
 			print!("{} ", male_answer[i]);
 		}
