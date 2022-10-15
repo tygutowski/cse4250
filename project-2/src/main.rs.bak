@@ -1,3 +1,9 @@
+// Author: Tyler Gutowski, tgutowski2020@fit.edu
+// Author: Brennan Pike, bpike2020@fit.edu
+// Course: CSE 4250, Fall 2022
+// Project: Proj2, Manatee Evacuation
+// Implementation: rustc 1.57.0 (f1edd0429 2021-11-29)
+
 use std::io;
 use std::cmp::Ordering;
 
@@ -8,10 +14,15 @@ pub struct Manatee {
 	age: i32,
 	index: i32
 }
+
+// Implementation for sorting the manatees
 impl Ord for Manatee {
 	fn cmp(&self, other: &Self) -> Ordering {
+		// Prioritize age
 		if self.age == other.age {
+			// Then size
 			if self.size == other.size {
+				// And lastly index (doesnt matter unless using BTreeSet)
 				return self.index.cmp(&other.index);
 			}
 			return self.size.cmp(&other.size);
@@ -22,11 +33,9 @@ impl Ord for Manatee {
 
 // Main function
 fn main() -> io::Result<()> {	
-	let mut pairs: usize = 0;
+	let mut pairs: i32 = 0;
 	let mut female_manatees: Vec<Manatee> = Vec::new();
 	let mut male_manatees: Vec<Manatee> = Vec::new();
-	let mut max_female_size: i32 = 0;
-	let mut max_male_size: i32 = 0;
 	// Read the first five lines from stdio
 	for n in 1..6  {
 		// Set the input variable to be a new string
@@ -37,8 +46,7 @@ fn main() -> io::Result<()> {
 		
 		match n {
 			// Get number of pairs
-			1 =>
-			pairs = buffer_split.next().expect("found empty string where number expected").parse::<usize>().unwrap(),
+			1 => pairs = buffer_split.next().expect("found empty string where number expected").parse::<i32>().unwrap(),
 			
 			// Get female manatee age and add it to the female_manatee_vec
 			2 => 
@@ -90,75 +98,94 @@ fn main() -> io::Result<()> {
 		}			
 	}
 
-
-	
 	// Sort both vectors of manatees.
-
-	
-	let mut impossible: bool = true;
-	
 	let mut female_answer: Vec<i32> = Vec::new();
 	let mut male_answer: Vec<i32> = Vec::new();
 	
-	// morbin' time.
+	// Assume no pair found until one is found
+	let mut impossible = false;
+	let mut no_pair = true;
 
-	for i in 0..pairs-1 {
-		// Sort both lists of manatees
-		female_manatees.sort_by(|a, b| a.cmp(b));
-		male_manatees.sort_by(|a, b| a.cmp(b));
-		// Get the first manatee in each list
-		let mut first_male = &male_manatees[0];
-		let mut first_female = &female_manatees[0];
-		// Get the smallest (first) female that is larger than the male.
-		if(female_manatees[i].size > first_male.size) {
-			print!("{}:{}", female_manatees[i].age, female_manatees[i].size);
-			female_answer.push(female_manatees[i].index);
-			male_answer.push(male_manatees[i].index);
-			break;
+	// Sort both lists of manatees
+	female_manatees.sort_by(|a, b| a.cmp(b));
+	male_manatees.sort_by(|a, b| a.cmp(b));
+
+	// its morbin' time
+	for i in 0..female_manatees.len() {
+		if !impossible {
+			// Get the first manatee in each list
+			let first_male = male_manatees[0];
+			let first_female = female_manatees[0];
+			let youngest_age = first_female.age;
+			
+			for j in 0..female_manatees.len() {
+				if female_manatees[j].size > first_male.size { // If there is a female manatee that is larger than the male
+					println!("removing female of size {}", first_female.size);
+					let female_index = female_manatees.remove(j).index; // Put female into answer
+					female_answer.push(female_index);
+					let male_index = male_manatees.remove(j).index; // Put male into answer
+					male_answer.push(male_index);
+					no_pair = false; // We found a pair
+					break; // Break. no need to continue!
+				}
+				// Too old! Not in order anymore. Break and try male to female.
+				if female_manatees[j].age > youngest_age { 
+					break;
+				}
+			}
+			if no_pair {
+				// No pair? This manatee might match up with an older manatee.
+				// Find the best match for the female, instead.
+				let mut best_match = first_male;
+				let mut best_index = 0;
+				let youngest_age = first_male.age;
+				// Finding the best male for the first female is a bit more complex.
+				// We want the LARGEST one, but we don't know which is the largest
+				// until we've polled them all (of the right age).
+				println!("finding a pair for {}", first_female.size);
+				for j in 0..male_manatees.len() {
+					// Change the best male manatee if:
+					// its size is smaller than current and
+					// its still smaller than the smallest female
+					if (best_match.size < male_manatees[j].size && best_match.size < first_female.size) || best_match.size > first_female.size {
+						best_match = male_manatees[j];
+						best_index = j;
+						println!("best male manatee size is {}", best_match.size);
+					}
+					// Once we find one that's too big or too old, break off.
+					if male_manatees[j].age > youngest_age || best_match.size > first_female.size {
+						break;
+					}
+				}
+
+				if best_match.size > first_female.size {
+					// There's no good match for this female.
+					// The setup is impossible.
+					impossible = true;
+					break;
+				}
+				// Otherwise, add the pairs
+				println!("removing female of size {}", first_female.size);
+				let female_index = female_manatees.remove(i).index;
+				female_answer.push(female_index);
+				male_manatees.remove(best_index);
+				male_answer.push(best_match.index);
+			}
+			no_pair = true
 		}
-	}
+	} 
 	if impossible {
-		print!("impossible");
+		println!("impossible");	
 	}
-	//let mut manatee_index = male_manatees.binary_search_by_key(&11, |&Manatee{ size, age, index }| age).unwrap();
-	//print!("{}", male_manatees[manatee_index].size);
-	
-	// print indeces of manatees
-	print!("\n");
-	for i in 0..(pairs) {
-		let current_manatee = female_answer[i];
-		print!("{} ", current_manatee);
+
+	// print indices of manatees
+	println!("\nThere are {} female answers", female_answer.len());
+	for i in 0..(female_answer.len()) {
+		print!("{} ", female_answer[i]);
 	}
-	print!("\n");
-	for i in 0..(pairs) {
-		let current_manatee = male_answer[i];
-		print!("{} ", current_manatee);
-	}
-	
-	
-	
-	// Print the manatee sets
-	print!("\n");
-	for i in 0..(pairs) {
-		let current_manatee = female_manatees[i];
-		print!("{} ", current_manatee.age);
-	}
-	print!("\n");
-	for i in 0..(pairs) {
-		let current_manatee = female_manatees[i];
-		print!("{} ", current_manatee.size);
-	}
-	
-	
-	print!("\n\n");
-	for i in 0..(pairs) {
-		let current_manatee = male_manatees[i];
-		print!("{} ", current_manatee.age);
-	}
-	print!("\n");
-	for i in 0..(pairs) {
-		let current_manatee = male_manatees[i];
-		print!("{} ", current_manatee.size);
+	println!("\nThere are {} male answers", male_answer.len());
+	for i in 0..(male_answer.len()) {
+		print!("{} ", male_answer[i]);
 	}
 	Ok(())
 }
